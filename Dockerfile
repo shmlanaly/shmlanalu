@@ -1,4 +1,4 @@
-FROM python:3.9-buster
+FROM python:3.9-bullseye
 
 RUN apt-get update && apt-get upgrade -y
 RUN apt-get install -y ffmpeg git
