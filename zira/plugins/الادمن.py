@@ -1,5 +1,4 @@
 import asyncio
-import shutil
 import contextlib
 from datetime import datetime
 
@@ -8,15 +7,13 @@ from telethon.tl.functions.channels import EditBannedRequest
 from telethon.tl.types import ChatBannedRights
 from telethon.utils import get_display_name
 
-from . import zedub
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers.utils import _format
-from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from ..sql_helper.echo_sql import addecho, get_all_echos, get_echos, is_echo, remove_all_echos, remove_echo, remove_echos
 from ..sql_helper import gban_sql_helper as gban_sql
+from ..sql_helper.globals import gvarstatus
 from ..sql_helper.mute_sql import is_muted, mute, unmute
-from ..utils import Zed_Dev
-from . import BOTLOG, BOTLOG_CHATID, admin_groups, get_user_from_event
+from . import BOTLOG, BOTLOG_CHATID, admin_groups, get_user_from_event, zedub
+
 plugin_category = "الادمن"
 
 BANNED_RIGHTS = ChatBannedRights(
@@ -45,6 +42,7 @@ UNBAN_RIGHTS = ChatBannedRights(
 zel_dev = (5176749470, 5426390871, 6269975462, 1985225531)
 KTMZ = gvarstatus("Z_KTM") or "كتم"
 
+
 @zedub.zed_cmd(
     pattern="ح عام(?:\s|$)([\s\S]*)",
     command=("gban", plugin_category),
@@ -64,10 +62,13 @@ async def zedgban(event):  # sourcery no-metrics
     if user.id == zedub.uid:
         return await edit_delete(zede, "**⎉╎عـذراً ..لا استطيـع حظـࢪ نفسـي **")
     if user.id in zel_dev:
-        return await edit_delete(zede, "**⎉╎عـذراً ..لا استطيـع حظـࢪ احـد المطـورين عـام **")
+        return await edit_delete(
+            zede, "**⎉╎عـذراً ..لا استطيـع حظـࢪ احـد المطـورين عـام **"
+        )
     if user.id == 925972505 or user.id == 1895219306 or user.id == 2095357462:
-        return await edit_delete(zede, "**⎉╎عـذراً ..لا استطيـع حظـࢪ مطـور السـورس عـام **")
-
+        return await edit_delete(
+            zede, "**⎉╎عـذراً ..لا استطيـع حظـࢪ مطـور السـورس عـام **"
+        )
 
     if gban_sql.is_gbanned(user.id):
         await zede.edit(
@@ -79,7 +80,9 @@ async def zedgban(event):  # sourcery no-metrics
     count = 0
     sandy = len(san)
     if sandy == 0:
-        return await edit_delete(zede, "**⎉╎عــذراً .. يجـب ان تكــون مشـرفـاً فـي مجموعـة واحـده ع الأقــل **")
+        return await edit_delete(
+            zede, "**⎉╎عــذراً .. يجـب ان تكــون مشـرفـاً فـي مجموعـة واحـده ع الأقــل **"
+        )
     await zede.edit(
         f"**⎉╎جـاري بـدء حظـر ↠** [{user.first_name}](tg://user?id={user.id}) **\n\n**⎉╎مـن ↠ {len(san)} كــروب**"
     )
@@ -160,7 +163,9 @@ async def zedgban(event):
     count = 0
     sandy = len(san)
     if sandy == 0:
-        return await edit_delete(zede, "**⎉╎عــذراً .. يجـب ان تكــون مشـرفـاً فـي مجموعـة واحـده ع الأقــل **")
+        return await edit_delete(
+            zede, "**⎉╎عــذراً .. يجـب ان تكــون مشـرفـاً فـي مجموعـة واحـده ع الأقــل **"
+        )
     await zede.edit(
         f"**⎉╎جـاري الغــاء حظـر ↠** [{user.first_name}](tg://user?id={user.id}) **\n\n**⎉╎مـن ↠ {len(san)} كــروب**"
     )
@@ -227,9 +232,7 @@ async def gablist(event):
             if a_user.reason:
                 GBANNED_LIST += f"**⎉╎المستخـدم :**  [{a_user.chat_id}](tg://user?id={a_user.chat_id}) \n**⎉╎سـبب الحظـر : {a_user.reason} ** \n\n"
             else:
-                GBANNED_LIST += (
-                    f"**⎉╎المستخـدم :**  [{a_user.chat_id}](tg://user?id={a_user.chat_id}) \n**⎉╎سـبب الحظـر : لا يـوجـد ** \n\n"
-                )
+                GBANNED_LIST += f"**⎉╎المستخـدم :**  [{a_user.chat_id}](tg://user?id={a_user.chat_id}) \n**⎉╎سـبب الحظـر : لا يـوجـد ** \n\n"
     else:
         GBANNED_LIST = "**- لايــوجـد محظــورين عــام بعــد**"
     await edit_or_reply(event, GBANNED_LIST)
@@ -246,16 +249,24 @@ async def startgmute(event):
         if not user:
             return
         if user.id == zedub.uid:
-            return await edit_or_reply(event, "**- عــذࢪاً .. لايمكــنك كتــم نفســك ؟!**")
+            return await edit_or_reply(
+                event, "**- عــذࢪاً .. لايمكــنك كتــم نفســك ؟!**"
+            )
         if user.id in zel_dev:
-            return await edit_or_reply(event, "**- عــذࢪاً .. لايمكــنك كتــم احـد المطـورين ؟!**")
+            return await edit_or_reply(
+                event, "**- عــذࢪاً .. لايمكــنك كتــم احـد المطـورين ؟!**"
+            )
         if user.id == 925972505 or user.id == 1895219306 or user.id == 2095357462:
-            return await edit_or_reply(event, "**- عــذࢪاً .. لايمكــنك كتــم مطـور السـورس ؟!**")
+            return await edit_or_reply(
+                event, "**- عــذࢪاً .. لايمكــنك كتــم مطـور السـورس ؟!**"
+            )
         userid = user.id
     try:
         user = await event.client.get_entity(userid)
     except Exception:
-        return await edit_or_reply(event, "**- عــذࢪاً .. لايمكــنني العثــوࢪ علـى المسـتخــدم ؟!**")
+        return await edit_or_reply(
+            event, "**- عــذࢪاً .. لايمكــنني العثــوࢪ علـى المسـتخــدم ؟!**"
+        )
     if is_muted(userid, "gmute"):
         return await edit_or_reply(
             event,
@@ -322,15 +333,20 @@ async def endgmute(event):
         if not user:
             return
         if user.id == zedub.uid:
-            return await edit_or_reply(event, "**- عــذࢪاً .. انت غيـر مكتـوم يامطــي ؟!**")
+            return await edit_or_reply(
+                event, "**- عــذࢪاً .. انت غيـر مكتـوم يامطــي ؟!**"
+            )
         userid = user.id
     try:
         user = await event.client.get_entity(userid)
     except Exception:
-        return await edit_or_reply(event, "**- عــذࢪاً .. لايمكــنني العثــوࢪ علـى المسـتخــدم ؟!**")
+        return await edit_or_reply(
+            event, "**- عــذࢪاً .. لايمكــنني العثــوࢪ علـى المسـتخــدم ؟!**"
+        )
     if not is_muted(userid, "gmute"):
         return await edit_or_reply(
-            event, f"**⎉╎المستخـدم :** {_format.mentionuser(user.first_name ,user.id)}\n\n**⎉╎غيـر مكتـوم عــام ✓**"
+            event,
+            f"**⎉╎المستخـدم :** {_format.mentionuser(user.first_name ,user.id)}\n\n**⎉╎غيـر مكتـوم عــام ✓**",
         )
     try:
         unmute(userid, "gmute")
@@ -391,16 +407,24 @@ async def catgkick(event):  # sourcery no-metrics
     if not user:
         return
     if user.id == zedub.uid:
-        return await edit_delete(zede, "**╮ ❐ ... عــذراً لا استطــيع طــرد نفســي ... ❏╰**")
+        return await edit_delete(
+            zede, "**╮ ❐ ... عــذراً لا استطــيع طــرد نفســي ... ❏╰**"
+        )
     if user.id in zel_dev:
-        return await edit_delete(zede, "**╮ ❐ ... عــذࢪاً .. لا استطــيع طــرد المطـورين ... ❏╰**")
+        return await edit_delete(
+            zede, "**╮ ❐ ... عــذࢪاً .. لا استطــيع طــرد المطـورين ... ❏╰**"
+        )
     if user.id == 925972505 or user.id == 1895219306 or user.id == 2095357462:
-        return await edit_delete(zede, "**╮ ❐ ... عــذࢪاً .. لا استطــيع طــرد مطـور السـورس ... ❏╰**")
+        return await edit_delete(
+            zede, "**╮ ❐ ... عــذࢪاً .. لا استطــيع طــرد مطـور السـورس ... ❏╰**"
+        )
     san = await admin_groups(event.client)
     count = 0
     sandy = len(san)
     if sandy == 0:
-        return await edit_delete(zede, "**⎉╎عــذراً .. يجـب ان تكــون مشـرفـاً فـي مجموعـة واحـده ع الأقــل **")
+        return await edit_delete(
+            zede, "**⎉╎عــذراً .. يجـب ان تكــون مشـرفـاً فـي مجموعـة واحـده ع الأقــل **"
+        )
     await zede.edit(
         f"**⎉╎بـدء طـرد ↠** [{user.first_name}](tg://user?id={user.id}) **\n\n**⎉╎فـي ↠ {len(san)} كــروب**"
     )
@@ -452,19 +476,19 @@ async def catgkick(event):  # sourcery no-metrics
         if reply:
             await reply.forward_to(BOTLOG_CHATID)
 
+
 # ================================================================================================ #
 # ================================================================================================ #
 # ================================================================================================ #
 
 import contextlib
-import shutil
 
 from telethon.errors import (
     BadRequestError,
     ImageProcessFailedError,
     PhotoCropSizeSmallError,
 )
-from telethon.errors.rpcerrorlist import UserAdminInvalidError, UserIdInvalidError
+from telethon.errors.rpcerrorlist import UserIdInvalidError
 from telethon.tl.functions.channels import (
     EditAdminRequest,
     EditBannedRequest,
@@ -478,17 +502,14 @@ from telethon.tl.types import (
 )
 from telethon.utils import get_display_name
 
-from . import zedub
-
 from ..core.data import _sudousers_list
 from ..core.logger import logging
 from ..core.managers import edit_delete, edit_or_reply
 from ..helpers import media_type
 from ..helpers.utils import _format, get_user_from_event
+from ..sql_helper.globals import gvarstatus
 from ..sql_helper.mute_sql import is_muted, mute, unmute
-from ..sql_helper.globals import addgvar, delgvar, gvarstatus
-from ..sql_helper.echo_sql import addecho, get_all_echos, get_echos, is_echo, remove_all_echos, remove_echo, remove_echos
-from . import BOTLOG, BOTLOG_CHATID
+from . import BOTLOG, BOTLOG_CHATID, zedub
 
 # =================== STRINGS ============
 PP_TOO_SMOL = "**⪼ الصورة صغيرة جدا**"
@@ -628,7 +649,9 @@ async def promote(event):
         await event.client(EditAdminRequest(event.chat_id, user.id, new_rights, rank))
     except BadRequestError:
         return await zzevent.edit(NO_PERM)
-    await zzevent.edit(f"**⎉╎المستخـدم** [{user.first_name}](tg://user?id={user.id}) \n**⎉╎تم رفعـه مشـرفـاً .. بنجـاح✓**")
+    await zzevent.edit(
+        f"**⎉╎المستخـدم** [{user.first_name}](tg://user?id={user.id}) \n**⎉╎تم رفعـه مشـرفـاً .. بنجـاح✓**"
+    )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -636,7 +659,6 @@ async def promote(event):
             \n**⎉╎الشخـص :** [{user.first_name}](tg://user?id={user.id})\
             \n**⎉╎المجمــوعــه :** {get_display_name(await event.get_chat())} (`{event.chat_id}`)",
         )
-
 
 
 @zedub.zed_cmd(pattern="رفع مالك(?:\s|$)([\s\S]*)")
@@ -661,12 +683,16 @@ async def promote(event):
         rank = "admin"
     if not user:
         return
-    zzevent = await edit_or_reply(event, "**╮ ❐  جـاري ࢪفعه مشـرف بكـل الصـلاحيـات  ❏╰**")
+    zzevent = await edit_or_reply(
+        event, "**╮ ❐  جـاري ࢪفعه مشـرف بكـل الصـلاحيـات  ❏╰**"
+    )
     try:
         await event.client(EditAdminRequest(event.chat_id, user.id, new_rights, rank))
     except BadRequestError:
         return await zzevent.edit(NO_PERM)
-    await zzevent.edit(f"**⎉╎المستخـدم** [{user.first_name}](tg://user?id={user.id}) \n**⎉╎تم رفعـه مشـرفـاً بكل الصلاحيـات ✓**")
+    await zzevent.edit(
+        f"**⎉╎المستخـدم** [{user.first_name}](tg://user?id={user.id}) \n**⎉╎تم رفعـه مشـرفـاً بكل الصلاحيـات ✓**"
+    )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -739,7 +765,9 @@ async def demote(event):
         await event.client(EditAdminRequest(event.chat_id, user.id, newrights, rank))
     except BadRequestError:
         return await zzevent.edit(NO_PERM)
-    await zzevent.edit("**⎉╎المستخـدم** [{user.first_name}](tg://user?id={user.id}) \n**⎉╎تم تنـزيلـه مشـرف .. بنجـاح✓**")
+    await zzevent.edit(
+        "**⎉╎المستخـدم** [{user.first_name}](tg://user?id={user.id}) \n**⎉╎تم تنـزيلـه مشـرف .. بنجـاح✓**"
+    )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -761,7 +789,9 @@ async def _ban_person(event):
     if user.id == 925972505 or user.id == 1895219306 or user.id == 2095357462:
         return await edit_delete(event, "**╮ ❐ دي لا يمڪنني حظـر مطـور السـورس  ❏╰**")
     if user.id in zel_dev:
-        return await edit_delete(event, "**╮ ❐ دي لا يمڪنني حظـر مطـوريـن السـورس  ❏╰**")
+        return await edit_delete(
+            event, "**╮ ❐ دي لا يمڪنني حظـر مطـوريـن السـورس  ❏╰**"
+        )
     zedevent = await edit_or_reply(event, "**╮ ❐... جـاࢪِ الحـظـࢪ ...❏╰**")
     try:
         await event.client(EditBannedRequest(event.chat_id, user.id, BANNED_RIGHTS))
@@ -785,7 +815,7 @@ async def _ban_person(event):
             await event.client.send_file(
                 event.chat_id,
                 gvarstatus("PC_BANE"),
-                caption=f"**⎉╎المستخـدم :** {_format.mentionuser(user.first_name ,user.id)}  \n**⎉╎تم حظــࢪه بنجـاح ☑️**\n\n"
+                caption=f"**⎉╎المستخـدم :** {_format.mentionuser(user.first_name ,user.id)}  \n**⎉╎تم حظــࢪه بنجـاح ☑️**\n\n",
             )
             await zedevent.delete()
         else:
@@ -857,9 +887,13 @@ async def kick(event):
     if not user:
         return
     if user.id in zel_dev:
-        return await edit_delete(event, "**╮ ❐ دي لا يمڪنني طـرد مطـوريـن السـورس  ❏╰**")
+        return await edit_delete(
+            event, "**╮ ❐ دي لا يمڪنني طـرد مطـوريـن السـورس  ❏╰**"
+        )
     if user.id == 925972505 or user.id == 1895219306 or user.id == 2095357462:
-        return await edit_delete(event, "**╮ ❐ دي . . لا يمڪنني طـرد مطـور السـورس  ❏╰**")
+        return await edit_delete(
+            event, "**╮ ❐ دي . . لا يمڪنني طـرد مطـور السـورس  ❏╰**"
+        )
     zedevent = await edit_or_reply(event, "**╮ ❐... جـاࢪِ الطــࢪد ...❏╰**")
     try:
         await event.client.kick_participant(event.chat_id, user.id)
@@ -870,7 +904,9 @@ async def kick(event):
             f"**⎉╎تم طــࢪد**. [{user.first_name}](tg://user?id={user.id})  **بنجــاح ✓**\n\n**⎉╎السـبب :** {reason}"
         )
     else:
-        await zedevent.edit(f"**⎉╎تم طــࢪد**. [{user.first_name}](tg://user?id={user.id})  **بنجــاح ✓**")
+        await zedevent.edit(
+            f"**⎉╎تم طــࢪد**. [{user.first_name}](tg://user?id={user.id})  **بنجــاح ✓**"
+        )
     if BOTLOG:
         await event.client.send_message(
             BOTLOG_CHATID,
@@ -949,13 +985,17 @@ async def unpin(event):
             await event.client.unpin_message(event.chat_id)
         else:
             return await edit_delete(
-                event, "**- بالــرد ع رســالـه لـ الغــاء تثبيتـهــا او اسـتخـدم امـر .الغاء تثبيت الكل**", 5
+                event,
+                "**- بالــرد ع رســالـه لـ الغــاء تثبيتـهــا او اسـتخـدم امـر .الغاء تثبيت الكل**",
+                5,
             )
     except BadRequestError:
         return await edit_delete(event, NO_PERM, 5)
     except Exception as e:
         return await edit_delete(event, f"`{e}`", 5)
-    await edit_delete(event, "**⎉╎تم الغـاء تثبيـت الرسـالـه/الرسـائـل .. بنجــاح ✓**", 3)
+    await edit_delete(
+        event, "**⎉╎تم الغـاء تثبيـت الرسـالـه/الرسـائـل .. بنجــاح ✓**", 3
+    )
     sudo_users = _sudousers_list()
     if event.sender_id in sudo_users:
         with contextlib.suppress(BadRequestError):
@@ -991,7 +1031,9 @@ async def unpin(event):
 )
 async def _iundlt(event):  # sourcery no-metrics
     "لـ جـلب آخـر الرسـائـل المحـذوفـه مـن الاحـداث بـ العـدد"
-    zedevent = await edit_or_reply(event, "**- جـاري البحث عـن آخـر الاحداث انتظــر ...🔍**")
+    zedevent = await edit_or_reply(
+        event, "**- جـاري البحث عـن آخـر الاحداث انتظــر ...🔍**"
+    )
     flag = event.pattern_match.group(1)
     if event.pattern_match.group(2) != "":
         lim = int(event.pattern_match.group(2))

@@ -5,7 +5,7 @@ from pathlib import Path
 from ..Config import Config
 from ..core import CMD_INFO, PLG_INFO
 from ..utils import load_module, remove_plugin
-from . import CMD_HELP, CMD_LIST, SUDO_LIST, zedub, edit_delete, edit_or_reply, reply_id
+from . import CMD_HELP, CMD_LIST, SUDO_LIST, edit_delete, edit_or_reply, reply_id, zedub
 
 plugin_category = "الادوات"
 
@@ -30,9 +30,21 @@ def plug_checker(plugin):
 async def install(event):
     "لـ تنصيب ملفـات اضافيـه."
     zelzal = event.sender_id
-    zed_dev = (1895219306, 925972505, 5176749470, 5280339206, 5992422584, 6550930943, 6227985448, 5746412340, 6093001360)
+    zed_dev = (
+        1895219306,
+        925972505,
+        5176749470,
+        5280339206,
+        5992422584,
+        6550930943,
+        6227985448,
+        5746412340,
+        6093001360,
+    )
     if zelzal not in zed_dev:
-        return await edit_delete(event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10)
+        return await edit_delete(
+            event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10
+        )
     if event.reply_to_msg_id:
         try:
             downloaded_file_name = await event.client.download_media(
@@ -50,9 +62,7 @@ async def install(event):
                 )
             else:
                 os.remove(downloaded_file_name)
-                await edit_delete(
-                    event, "**- خطـأ .. هذا المـلف منصـب مسبقـاً ؟!**", 10
-                )
+                await edit_delete(event, "**- خطـأ .. هذا المـلف منصـب مسبقـاً ؟!**", 10)
         except Exception as e:
             await edit_delete(event, f"**- خطـأ :**\n`{e}`", 10)
             os.remove(downloaded_file_name)
@@ -71,15 +81,29 @@ async def install(event):
 async def load(event):
     "لـ تحميـل اي ملف مجـدداً .. اذا كنت قد الغيت تحميله مسبقـاً"
     zelzal = event.sender_id
-    zed_dev = (1895219306, 925972505, 5176749470, 5280339206, 5992422584, 6550930943, 6227985448, 5746412340, 6093001360)
+    zed_dev = (
+        1895219306,
+        925972505,
+        5176749470,
+        5280339206,
+        5992422584,
+        6550930943,
+        6227985448,
+        5746412340,
+        6093001360,
+    )
     if zelzal not in zed_dev:
-        return await edit_delete(event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10)
+        return await edit_delete(
+            event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10
+        )
     shortname = event.pattern_match.group(1)
     try:
         with contextlib.suppress(BaseException):
             remove_plugin(shortname)
         load_module(shortname)
-        await edit_delete(event, f"**⎉╎تـم تحميـل المـلف** {shortname} **.. بـ نجـاح ☑️**", 10)
+        await edit_delete(
+            event, f"**⎉╎تـم تحميـل المـلف** {shortname} **.. بـ نجـاح ☑️**", 10
+        )
     except Exception as e:
         await edit_or_reply(
             event,
@@ -99,9 +123,21 @@ async def load(event):
 async def send(event):
     "لـ تحميـل وجلب اي ملف من ملفـات السـورس اليك ع تيليجـرام"
     zelzal = event.sender_id
-    zed_dev = (1895219306, 925972505, 5176749470, 5280339206, 5992422584, 6550930943, 6227985448, 5746412340, 6093001360)
+    zed_dev = (
+        1895219306,
+        925972505,
+        5176749470,
+        5280339206,
+        5992422584,
+        6550930943,
+        6227985448,
+        5746412340,
+        6093001360,
+    )
     if zelzal not in zed_dev:
-        return await edit_delete(event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10)
+        return await edit_delete(
+            event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10
+        )
     reply_to_id = await reply_id(event)
     thumb = thumb_image_path if os.path.exists(thumb_image_path) else None
     input_str = event.pattern_match.group(1)
@@ -134,15 +170,29 @@ async def send(event):
 async def unload(event):
     "لـ الغـاء تحميـل اي ملـف من السـورس."
     zelzal = event.sender_id
-    zed_dev = (1895219306, 925972505, 5176749470, 5280339206, 5992422584, 6550930943, 6227985448, 5746412340, 6093001360)
+    zed_dev = (
+        1895219306,
+        925972505,
+        5176749470,
+        5280339206,
+        5992422584,
+        6550930943,
+        6227985448,
+        5746412340,
+        6093001360,
+    )
     if zelzal not in zed_dev:
-        return await edit_delete(event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10)
+        return await edit_delete(
+            event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10
+        )
     shortname = event.pattern_match.group(1)
     try:
         remove_plugin(shortname)
         await edit_or_reply(event, f"**⎉╎تم الغـاء تحميـل** {shortname} **.. بنجـاح✓**")
     except Exception as e:
-        await edit_or_reply(event, f"**⎉╎تم الغـاء تحميـل** {shortname} **.. بنجـاح✓**\n{e}")
+        await edit_or_reply(
+            event, f"**⎉╎تم الغـاء تحميـل** {shortname} **.. بنجـاح✓**\n{e}"
+        )
 
 
 @zedub.zed_cmd(
@@ -159,14 +209,27 @@ async def unload(event):
 async def unload(event):
     "لـ الغـاء تنصيب اي ملـف من السـورس."
     zelzal = event.sender_id
-    zed_dev = (1895219306, 925972505, 5176749470, 5280339206, 5992422584, 6550930943, 6227985448, 5746412340, 6093001360)
+    zed_dev = (
+        1895219306,
+        925972505,
+        5176749470,
+        5280339206,
+        5992422584,
+        6550930943,
+        6227985448,
+        5746412340,
+        6093001360,
+    )
     if zelzal not in zed_dev:
-        return await edit_delete(event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10)
+        return await edit_delete(
+            event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10
+        )
     shortname = event.pattern_match.group(1)
     path = plug_checker(shortname)
     if not os.path.exists(path):
         return await edit_delete(
-            event, f"**- عـذراً لا يـوجـد هنـاك مـلف بـ اسـم {shortname} لـ الغـاء تنصيبـه ؟!**"
+            event,
+            f"**- عـذراً لا يـوجـد هنـاك مـلف بـ اسـم {shortname} لـ الغـاء تنصيبـه ؟!**",
         )
     os.remove(path)
     if shortname in CMD_LIST:
@@ -177,9 +240,13 @@ async def unload(event):
         CMD_HELP.pop(shortname)
     try:
         remove_plugin(shortname)
-        await edit_or_reply(event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**")
+        await edit_or_reply(
+            event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**"
+        )
     except Exception as e:
-        await edit_or_reply(event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**\n{e}")
+        await edit_or_reply(
+            event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**\n{e}"
+        )
     if shortname in PLG_INFO:
         for cmd in PLG_INFO[shortname]:
             CMD_INFO.pop(cmd)
@@ -200,14 +267,27 @@ async def unload(event):
 async def unload(event):
     "لـ الغـاء تنصيب اي ملـف من السـورس."
     zelzal = event.sender_id
-    zed_dev = (1895219306, 925972505, 5176749470, 5280339206, 5992422584, 6550930943, 6227985448, 5746412340, 6093001360)
+    zed_dev = (
+        1895219306,
+        925972505,
+        5176749470,
+        5280339206,
+        5992422584,
+        6550930943,
+        6227985448,
+        5746412340,
+        6093001360,
+    )
     if zelzal not in zed_dev:
-        return await edit_delete(event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10)
+        return await edit_delete(
+            event, "**- عـذࢪاً .. عـزيـزي ؟!**\n**- هـذا الامـࢪ خاص بمطـوࢪ السـوࢪس**", 10
+        )
     shortname = event.pattern_match.group(1)
     path = plug_checker(shortname)
     if not os.path.exists(path):
         return await edit_delete(
-            event, f"**- عـذراً لا يـوجـد هنـاك مـلف بـ اسـم {shortname} لـ الغـاء تنصيبـه ؟!**"
+            event,
+            f"**- عـذراً لا يـوجـد هنـاك مـلف بـ اسـم {shortname} لـ الغـاء تنصيبـه ؟!**",
         )
     os.remove(path)
     if shortname in CMD_LIST:
@@ -218,9 +298,13 @@ async def unload(event):
         CMD_HELP.pop(shortname)
     try:
         remove_plugin(shortname)
-        await edit_or_reply(event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**")
+        await edit_or_reply(
+            event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**"
+        )
     except Exception as e:
-        await edit_or_reply(event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**\n{e}")
+        await edit_or_reply(
+            event, f"**⎉╎تـم الغـاء تنصيب المـلف** {shortname} **.. بـ نجـاح ☑️**\n{e}"
+        )
     if shortname in PLG_INFO:
         for cmd in PLG_INFO[shortname]:
             CMD_INFO.pop(cmd)
