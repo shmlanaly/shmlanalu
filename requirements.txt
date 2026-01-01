@@ -4,3 +4,6 @@ git+https://github.com/yt-dlp/yt-dlp
 ipaddress
 
 heroku3
+heroku3
+requests
+python-decouple
