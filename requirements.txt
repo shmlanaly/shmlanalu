@@ -7,3 +7,4 @@ heroku3
 heroku3
 requests
 python-decouple
+validators
