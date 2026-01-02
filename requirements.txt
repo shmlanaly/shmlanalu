@@ -10,3 +10,4 @@ python-decouple
 validators
 validators
 lxml_html_clean
+sqlalchemy
