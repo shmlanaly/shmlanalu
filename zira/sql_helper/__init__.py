@@ -5,13 +5,12 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-DB_URL = "postgresql+psycopg2://postgres:{password}@postgres.railway.internal:5432/railway".format(
-    password=os.getenv("PGPASSWORD")
-)
+
+DB_URL = os.getenv("DATABASE_URL")
 
 
 def start():
-    for i in range(30):
+    for i in range(5):
         try:
             engine = create_engine(DB_URL)
             conn = engine.connect()
@@ -23,22 +22,21 @@ def start():
     else:
         raise Exception("Database not ready after retries")
 
-    BASE.metadata.create_all(engine)
 
-    session_factory = sessionmaker(bind=engine, autoflush=False)
-    return scoped_session(session_factory)
+session_factory = sessionmaker(bind=engine, autoflush=False)
+return scoped_session(session_factory)
 
 
 SESSION = start()
 
-from .globals import BASE, Globals
+# moved below
+from .globals import Globals, BASE
 
 # Create tables
 BASE.metadata.create_all(SESSION.get_bind())
 
 
 # ===== Helper Functions =====
-
 
 def gvarstatus(variable):
     obj = SESSION.query(Globals).filter(Globals.variable == str(variable)).first()
