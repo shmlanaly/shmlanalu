@@ -5,7 +5,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-
 DB_URL = os.getenv("DATABASE_URL")
 
 
@@ -30,13 +29,14 @@ return scoped_session(session_factory)
 SESSION = start()
 
 # moved below
-from .globals import Globals, BASE
+from .globals import BASE, Globals
 
 # Create tables
 BASE.metadata.create_all(SESSION.get_bind())
 
 
 # ===== Helper Functions =====
+
 
 def gvarstatus(variable):
     obj = SESSION.query(Globals).filter(Globals.variable == str(variable)).first()

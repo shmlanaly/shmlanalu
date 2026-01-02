@@ -1,7 +1,8 @@
-from sqlalchemy.orm import declarative_base
 from sqlalchemy import Column, String, UnicodeText
+from sqlalchemy.orm import declarative_base
 
 BASE = declarative_base()
+
 
 class Globals(BASE):
     __tablename__ = "globals"
