@@ -17,7 +17,7 @@ def start() -> scoped_session:
         if "postgres://" in Config.DB_URI
         else Config.DB_URI
     )
-    engine = create_engine(database_url)
+    engine = create_engine("postgresql+psycopg2://postgres:qlHvHWIlCNNOZjyZUhgTWvTYbsIDsCFk@postgres.railway.internal:5432/railway?sslmode=disable")
     BASE.metadata.bind = engine
     BASE.metadata.create_all(engine)
     return scoped_session(sessionmaker(bind=engine, autoflush=False))
