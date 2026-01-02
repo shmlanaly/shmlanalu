@@ -1,51 +1,31 @@
 import time
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.exc import OperationalError
 
-import os
-
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import scoped_session, sessionmaker
-
-# the secret configuration specific things
-from ..Config import Config
-from ..core.logger import logging
-
-LOGS = logging.getLogger(__name__)
+from .core.base import BASE
 
 
-def start() -> scoped_session:
-    database_url = (
-        Config.DB_URI.replace("postgres:", "postgresql:")
-        if "postgres://" in Config.DB_URI
-        else Config.DB_URI
-    )
-    
-for i in range(10):
-    try:
-        engine = create_engine("postgresql+psycopg2://postgres:qlHvHWIlCNNOZjyZUhgTWvTYbsIDsCFk@postgres.railway.internal:5432/railway")
-        conn = engine.connect()
-        conn.close()
-        break
-    except OperationalError:
-        print("DB not ready — retry", i+1)
-        time.sleep(5)
-else:
-    raise Exception("Database still not ready after retries")
+DB_URL = "postgresql+psycopg2://postgres:{password}@postgres.railway.internal:5432/railway".format(
+    password=os.getenv("PGPASSWORD")
+)
 
-        "postgresql+psycopg2://postgres:qlHvHWIlCNNOZjyZUhgTWvTYbsIDsCFk@postgres.railway.internal:5432/railway?sslmode=disable"
-    )
-    BASE.metadata.bind = engine
+def start():
+    for i in range(10):
+        try:
+            engine = create_engine(DB_URL)
+            conn = engine.connect()
+            conn.close()
+            break
+        except OperationalError:
+            print(f"[DB] Not ready yet — retry {i+1}/10")
+            time.sleep(5)
+    else:
+        raise Exception("Database not ready after retries")
+
     BASE.metadata.create_all(engine)
-    return scoped_session(sessionmaker(bind=engine, autoflush=False))
 
+    session_factory = sessionmaker(bind=engine, autoflush=False)
+    return scoped_session(session_factory)
 
-try:
-    BASE = declarative_base()
-    SESSION = start()
-except AttributeError as e:
-    # this is a dirty way for the work-around required for #23
-    LOGS.error(
-        "DB_URI is not configured. Features depending on the database might have issues."
-    )
-    LOGS.error(str(e))
+SESSION = start()
