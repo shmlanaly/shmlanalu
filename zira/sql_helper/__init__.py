@@ -1,3 +1,6 @@
+import time
+from sqlalchemy.exc import OperationalError
+
 import os
 
 from sqlalchemy import create_engine
@@ -17,7 +20,19 @@ def start() -> scoped_session:
         if "postgres://" in Config.DB_URI
         else Config.DB_URI
     )
-    engine = create_engine(
+    
+for i in range(10):
+    try:
+        engine = create_engine("postgresql+psycopg2://postgres:qlHvHWIlCNNOZjyZUhgTWvTYbsIDsCFk@postgres.railway.internal:5432/railway")
+        conn = engine.connect()
+        conn.close()
+        break
+    except OperationalError:
+        print("DB not ready — retry", i+1)
+        time.sleep(5)
+else:
+    raise Exception("Database still not ready after retries")
+
         "postgresql+psycopg2://postgres:qlHvHWIlCNNOZjyZUhgTWvTYbsIDsCFk@postgres.railway.internal:5432/railway?sslmode=disable"
     )
     BASE.metadata.bind = engine
