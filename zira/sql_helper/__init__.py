@@ -11,7 +11,7 @@ DB_URL = "postgresql+psycopg2://postgres:{password}@postgres.railway.internal:54
 
 
 def start():
-    for i in range(10):
+    for i in range(30):
         try:
             engine = create_engine(DB_URL)
             conn = engine.connect()
