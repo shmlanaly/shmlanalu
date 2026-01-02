@@ -4,7 +4,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from .core.base import BASE
+from .globals import BASE
 
 DB_URL = "postgresql+psycopg2://postgres:{password}@postgres.railway.internal:5432/railway".format(
     password=os.getenv("PGPASSWORD")
