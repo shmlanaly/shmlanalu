@@ -1,10 +1,10 @@
+import os
 import time
 
 from sqlalchemy import create_engine
 from sqlalchemy.exc import OperationalError
 from sqlalchemy.orm import scoped_session, sessionmaker
 
-from .globals import BASE
 
 DB_URL = "postgresql+psycopg2://postgres:{password}@postgres.railway.internal:5432/railway".format(
     password=os.getenv("PGPASSWORD")
@@ -31,3 +31,32 @@ def start():
 
 
 SESSION = start()
+
+from .globals import Globals, BASE
+
+# Create tables
+BASE.metadata.create_all(SESSION.get_bind())
+
+
+# ===== Helper Functions =====
+
+def gvarstatus(variable):
+    obj = SESSION.query(Globals).filter(Globals.variable == str(variable)).first()
+    return obj.value if obj else None
+
+
+def addgvar(variable, value):
+    old = SESSION.query(Globals).filter(Globals.variable == str(variable)).one_or_none()
+    if old:
+        SESSION.delete(old)
+
+    new = Globals(variable, value)
+    SESSION.add(new)
+    SESSION.commit()
+
+
+def delgvar(variable):
+    obj = SESSION.query(Globals).filter(Globals.variable == str(variable)).one_or_none()
+    if obj:
+        SESSION.delete(obj)
+        SESSION.commit()
