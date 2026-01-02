@@ -21,14 +21,12 @@ def start():
     else:
         raise Exception("Database not ready after retries")
 
-
-session_factory = sessionmaker(bind=engine, autoflush=False)
-return scoped_session(session_factory)
+    session_factory = sessionmaker(bind=engine, autoflush=False)
+    return scoped_session(session_factory)
 
 
 SESSION = start()
 
-# moved below
 from .globals import BASE, Globals
 
 # Create tables
@@ -37,14 +35,17 @@ BASE.metadata.create_all(SESSION.get_bind())
 
 # ===== Helper Functions =====
 
-
 def gvarstatus(variable):
-    obj = SESSION.query(Globals).filter(Globals.variable == str(variable)).first()
+    obj = SESSION.query(Globals).filter(
+        Globals.variable == str(variable)
+    ).first()
     return obj.value if obj else None
 
 
 def addgvar(variable, value):
-    old = SESSION.query(Globals).filter(Globals.variable == str(variable)).one_or_none()
+    old = SESSION.query(Globals).filter(
+        Globals.variable == str(variable)
+    ).one_or_none()
     if old:
         SESSION.delete(old)
 
@@ -54,7 +55,9 @@ def addgvar(variable, value):
 
 
 def delgvar(variable):
-    obj = SESSION.query(Globals).filter(Globals.variable == str(variable)).one_or_none()
+    obj = SESSION.query(Globals).filter(
+        Globals.variable == str(variable)
+    ).one_or_none()
     if obj:
         SESSION.delete(obj)
         SESSION.commit()
